@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package io.michaelrocks.grip.mirrors
 
 data class InnerClass(
-    val type: Type.Object,
-    val outerType: Type.Object?,
-    val innerName: String?,
-    val access: Int
+  val type: Type.Object,
+  val outerType: Type.Object?,
+  val innerName: String?,
+  val access: Int
 )

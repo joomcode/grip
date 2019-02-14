@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,12 @@ class TypedMatchersTest {
     given(type).thenReturn(Type.Primitive.Void)
   }
 
-  @Test fun testTypeTrue() = typed.testType(true) { type { _, _ -> true } }
-  @Test fun testTypeFalse() = typed.testType(false) { type { _, _ -> false } }
+  @Test
+  fun testTypeTrue() = typed.testType(true) { type { _, _ -> true } }
+
+  @Test
+  fun testTypeFalse() = typed.testType(false) { type { _, _ -> false } }
 
   private inline fun Typed<*>.testType(condition: Boolean, body: () -> ((Grip, Typed<*>) -> Boolean)) =
-      assertAndVerify(condition, body) { type }
+    assertAndVerify(condition, body) { type }
 }

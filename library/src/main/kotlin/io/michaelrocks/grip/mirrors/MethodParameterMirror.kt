@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ interface MethodParameterMirror : Annotated {
   val type: Type
 
   class Builder(
-      val index: Int,
-      val type: Type
+    val index: Int,
+    val type: Type
   ) {
     private val annotations = LazyList<AnnotationMirror>()
 

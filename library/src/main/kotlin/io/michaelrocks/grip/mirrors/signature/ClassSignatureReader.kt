@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.signature.SignatureVisitor
 
 internal class ClassSignatureReader(
-    enclosingGenericDeclaration: GenericDeclaration
+  enclosingGenericDeclaration: GenericDeclaration
 ) : SignatureVisitor(Opcodes.ASM5) {
 
   private val builder = ClassSignatureMirror.Builder()

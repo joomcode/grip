@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@ package io.michaelrocks.grip
 import io.michaelrocks.grip.mirrors.ClassMirror
 
 internal class ClassesQueryBuilder(
-    grip: Grip
+  grip: Grip
 ) : AbstractQueryBuilder<ClassMirror, ClassesResult>(grip) {
 
   override fun execute(source: ClassMirrorSource, matcher: (Grip, ClassMirror) -> Boolean): ClassesResult =
-      buildClassesResult {
-        for (classMirror in source.getClassMirrors()) {
-          if (matcher(grip, classMirror)) {
-            addClass(classMirror)
-          }
+    buildClassesResult {
+      for (classMirror in source.getClassMirrors()) {
+        if (matcher(grip, classMirror)) {
+          addClass(classMirror)
         }
       }
+    }
 }

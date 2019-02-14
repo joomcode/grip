@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,9 @@ sealed class GenericType {
   }
 
   data class TypeVariable(
-      val name: String,
-      val classBound: GenericType = OBJECT_RAW_TYPE,
-      val interfaceBounds: List<GenericType> = emptyList()
+    val name: String,
+    val classBound: GenericType = OBJECT_RAW_TYPE,
+    val interfaceBounds: List<GenericType> = emptyList()
   ) : GenericType() {
     override fun toString(): String = name
   }
@@ -48,13 +48,13 @@ sealed class GenericType {
 
   data class Parameterized(val type: Type.Object, val typeArguments: List<GenericType>) : GenericType() {
     constructor(
-        type: Type.Object,
-        typeArgument: GenericType,
-        vararg typeArguments: GenericType
+      type: Type.Object,
+      typeArgument: GenericType,
+      vararg typeArguments: GenericType
     ) : this(type, listOf(typeArgument) + typeArguments.asList())
 
     override fun toString() =
-        StringBuilder(type.className).apply { typeArguments.joinTo(this, prefix = "<", postfix = ">") }.toString()
+      StringBuilder(type.className).apply { typeArguments.joinTo(this, prefix = "<", postfix = ">") }.toString()
   }
 
   data class Inner(val name: String, val type: GenericType, val ownerType: GenericType) : GenericType() {

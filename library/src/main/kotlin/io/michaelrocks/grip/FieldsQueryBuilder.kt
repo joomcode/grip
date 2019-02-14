@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +18,27 @@ package io.michaelrocks.grip
 
 import io.michaelrocks.grip.commons.ResettableLazy
 import io.michaelrocks.grip.mirrors.FieldMirror
-import java.util.*
+import java.util.ArrayList
 
 internal class FieldsQueryBuilder(
-    grip: Grip
+  grip: Grip
 ) : AbstractQueryBuilder<FieldMirror, FieldsResult>(grip) {
 
   override fun execute(source: ClassMirrorSource, matcher: (Grip, FieldMirror) -> Boolean): FieldsResult =
-      buildFieldsResult {
-        val fieldMirrors = ResettableLazy { ArrayList<FieldMirror>() }
-        for (classMirror in source.getClassMirrors()) {
-          for (fieldMirror in classMirror.fields) {
-            if (matcher(grip, fieldMirror)) {
-              fieldMirrors.value.add(fieldMirror)
-            }
+    buildFieldsResult {
+      val fieldMirrors = ResettableLazy { ArrayList<FieldMirror>() }
+      for (classMirror in source.getClassMirrors()) {
+        for (fieldMirror in classMirror.fields) {
+          if (matcher(grip, fieldMirror)) {
+            fieldMirrors.value.add(fieldMirror)
           }
-
-          if (fieldMirrors.initialized) {
-            addFields(classMirror, fieldMirrors.value)
-          }
-
-          fieldMirrors.reset()
         }
+
+        if (fieldMirrors.initialized) {
+          addFields(classMirror, fieldMirrors.value)
+        }
+
+        fieldMirrors.reset()
       }
+    }
 }

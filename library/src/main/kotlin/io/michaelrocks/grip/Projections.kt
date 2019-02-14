@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,16 +32,16 @@ sealed class Projection<M, R> {
 
   object Classes : Projection<ClassMirror, ClassesResult>() {
     override fun configurator(grip: Grip) =
-        ClassesQueryBuilder(grip)
+      ClassesQueryBuilder(grip)
   }
 
   object Fields : Projection<FieldMirror, FieldsResult>() {
     override fun configurator(grip: Grip) =
-        FieldsQueryBuilder(grip)
+      FieldsQueryBuilder(grip)
   }
 
   object Methods : Projection<MethodMirror, MethodsResult>() {
     override fun configurator(grip: Grip) =
-        MethodsQueryBuilder(grip)
+      MethodsQueryBuilder(grip)
   }
 }

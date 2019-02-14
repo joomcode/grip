@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package io.michaelrocks.grip.commons
 
-import java.util.*
+import java.util.Collections
+import java.util.SortedMap
+import java.util.SortedSet
 
 internal fun <T> Collection<T>.immutable(): Collection<T> = Collections.unmodifiableCollection(this)
 internal fun <T> List<T>.immutable(): List<T> = Collections.unmodifiableList(this)

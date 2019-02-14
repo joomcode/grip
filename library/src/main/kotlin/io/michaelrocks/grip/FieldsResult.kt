@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ interface FieldsResult : Map<Type.Object, List<FieldMirror>> {
     get() = keys
 
   fun containsType(type: Type.Object) =
-      containsKey(type)
+    containsKey(type)
 
   class Builder {
     private val fields = LazyMap<Type.Object, List<FieldMirror>>()
@@ -39,16 +39,16 @@ interface FieldsResult : Map<Type.Object, List<FieldMirror>> {
     fun build(): FieldsResult = ImmutableFieldsResult(this)
 
     private class ImmutableFieldsResult(
-        builder: Builder
+      builder: Builder
     ) : FieldsResult, Map<Type.Object, List<FieldMirror>> by builder.fields.detachImmutableCopy()
   }
 }
 
 internal inline fun buildFieldsResult(body: FieldsResult.Builder.() -> Unit) =
-    FieldsResult.Builder().run {
-      body()
-      build()
-    }
+  FieldsResult.Builder().run {
+    body()
+    build()
+  }
 
 val Map.Entry<Type.Object, List<FieldMirror>>.type: Type.Object
   get() = key

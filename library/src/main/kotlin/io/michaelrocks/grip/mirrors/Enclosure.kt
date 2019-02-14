@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,17 @@ sealed class Enclosure {
   object None : Enclosure()
 
   sealed class Method(
-      val enclosingType: Type.Object
+    val enclosingType: Type.Object
   ) : Enclosure() {
 
     class Anonymous(
-        enclosingType: Type.Object
+      enclosingType: Type.Object
     ) : Method(enclosingType)
 
     class Named(
-        enclosingType: Type.Object,
-        val methodName: String,
-        val methodType: Type.Method
+      enclosingType: Type.Object,
+      val methodName: String,
+      val methodType: Type.Method
     ) : Method(enclosingType)
   }
 }

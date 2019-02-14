@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ interface Grip : Closeable {
 }
 
 internal class GripImpl(
-    override val fileRegistry: FileRegistry,
-    override val classRegistry: ClassRegistry,
-    private val closeable: Closeable
+  override val fileRegistry: FileRegistry,
+  override val classRegistry: ClassRegistry,
+  private val closeable: Closeable
 ) : Grip {
 
   private var closed = false

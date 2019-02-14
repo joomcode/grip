@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ interface FieldSignatureMirror {
 }
 
 internal class LazyFieldSignatureMirror(
-    private val signature: String,
-    private val genericDeclaration: GenericDeclaration
+  private val signature: String,
+  private val genericDeclaration: GenericDeclaration
 ) : FieldSignatureMirror {
   private val delegate by lazy(LazyThreadSafetyMode.PUBLICATION) { readFieldSignature(signature, genericDeclaration) }
 
@@ -59,6 +59,6 @@ internal class EmptyFieldSignatureMirror(type: Type) : FieldSignatureMirror {
 }
 
 internal fun readFieldSignature(signature: String, genericDeclaration: GenericDeclaration): FieldSignatureMirror =
-    FieldSignatureMirror.Builder()
-        .type(readGenericType(signature, genericDeclaration))
-        .build()
+  FieldSignatureMirror.Builder()
+    .type(readGenericType(signature, genericDeclaration))
+    .build()

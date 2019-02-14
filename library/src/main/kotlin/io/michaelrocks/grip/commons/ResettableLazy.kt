@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package io.michaelrocks.grip.commons
 
 internal class ResettableLazy<out T>(
-    private val initializer: () -> T
+  private val initializer: () -> T
 ) {
   private var currentValue: Any? = Uninitialized
 
@@ -38,7 +38,7 @@ internal class ResettableLazy<out T>(
   }
 
   override fun toString(): String =
-      if (initialized) currentValue.toString() else "Lazy value not initialized yet."
+    if (initialized) currentValue.toString() else "Lazy value not initialized yet."
 
   private object Uninitialized
 }

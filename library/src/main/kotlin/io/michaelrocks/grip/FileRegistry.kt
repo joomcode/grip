@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,8 @@ interface FileRegistry {
 }
 
 internal class FileRegistryImpl(
-    classpath: Iterable<File>,
-    private val fileSourceFactory: FileSource.Factory
+  classpath: Iterable<File>,
+  private val fileSourceFactory: FileSource.Factory
 ) : FileRegistry, Closeable {
   private val sources = LinkedHashMap<File, FileSource>()
   private val filesByTypes = HashMap<Type.Object, File>()

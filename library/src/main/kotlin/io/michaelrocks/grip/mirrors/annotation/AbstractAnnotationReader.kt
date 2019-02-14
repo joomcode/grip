@@ -25,8 +25,8 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type as AsmType
 
 internal abstract class AbstractAnnotationReader<out T> protected constructor(
-    private val classRegistry: ClassRegistry,
-    private val callback: (T) -> Unit
+  private val classRegistry: ClassRegistry,
+  private val callback: (T) -> Unit
 ) : AnnotationVisitor(Opcodes.ASM5) {
 
   override fun visit(name: String?, value: Any) {

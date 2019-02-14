@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package io.michaelrocks.grip
 import io.michaelrocks.grip.io.IoFactory
 import io.michaelrocks.grip.mirrors.ReflectorImpl
 import java.io.File
-import java.util.*
+import java.util.ArrayList
 
 object GripFactory {
   fun create(file: File, vararg files: File): Grip {

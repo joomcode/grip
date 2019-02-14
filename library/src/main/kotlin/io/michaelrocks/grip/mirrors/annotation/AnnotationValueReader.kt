@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ package io.michaelrocks.grip.mirrors.annotation
 import io.michaelrocks.grip.ClassRegistry
 
 internal class AnnotationValueReader(
-    classRegistry: ClassRegistry,
-    callback: (Any) -> Unit
+  classRegistry: ClassRegistry,
+  callback: (Any) -> Unit
 ) : AbstractAnnotationReader<Any>(classRegistry, callback) {
 
   private var value: Any? = null

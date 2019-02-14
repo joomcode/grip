@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ interface ClassMirrorSource {
 }
 
 class FunctionClassMirrorSource(
-    private val classMirrorsProvider: () -> Sequence<ClassMirror>
+  private val classMirrorsProvider: () -> Sequence<ClassMirror>
 ) : ClassMirrorSource {
   override fun getClassMirrors(): Sequence<ClassMirror> {
     return classMirrorsProvider()
@@ -32,8 +32,8 @@ class FunctionClassMirrorSource(
 }
 
 internal class FilesClassMirrorSource(
-    private val grip: Grip,
-    private val files: Collection<File>
+  private val grip: Grip,
+  private val files: Collection<File>
 ) : ClassMirrorSource {
   override fun getClassMirrors(): Sequence<ClassMirror> {
     return files.asSequence().flatMap { file ->

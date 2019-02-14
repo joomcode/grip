@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import org.objectweb.asm.signature.SignatureVisitor
 private val OBJECT_UPPER_BOUNDED_TYPE = GenericType.UpperBounded(OBJECT_RAW_TYPE)
 
 internal class GenericTypeReader(
-    private val genericDeclaration: GenericDeclaration,
-    private val callback: (GenericType) -> Unit
+  private val genericDeclaration: GenericDeclaration,
+  private val callback: (GenericType) -> Unit
 ) : SignatureVisitor(Opcodes.ASM5) {
   private var genericType: GenericType? = null
   private var classType: Type.Object? = null
@@ -72,12 +72,12 @@ internal class GenericTypeReader(
   override fun visitTypeArgument(name: Char): SignatureVisitor {
     return GenericTypeReader(genericDeclaration) {
       typeArguments.add(
-          when (name) {
-            SignatureVisitor.EXTENDS -> GenericType.UpperBounded(it)
-            SignatureVisitor.SUPER -> GenericType.LowerBounded(it)
-            SignatureVisitor.INSTANCEOF -> it
-            else -> error("Unknown wildcard type: $name")
-          }
+        when (name) {
+          SignatureVisitor.EXTENDS -> GenericType.UpperBounded(it)
+          SignatureVisitor.SUPER -> GenericType.LowerBounded(it)
+          SignatureVisitor.INSTANCEOF -> it
+          else -> error("Unknown wildcard type: $name")
+        }
       )
     }
   }
@@ -90,11 +90,11 @@ internal class GenericTypeReader(
   private fun buildGenericType() {
     if (classType != null) {
       val innerType =
-          if (typeArguments.isEmpty()) {
-            GenericType.Raw(classType!!)
-          } else {
-            GenericType.Parameterized(classType!!, typeArguments.toList())
-          }
+        if (typeArguments.isEmpty()) {
+          GenericType.Raw(classType!!)
+        } else {
+          GenericType.Parameterized(classType!!, typeArguments.toList())
+        }
       genericType = genericType?.let { GenericType.Inner(className!!, innerType, it) } ?: innerType
     }
 
@@ -123,9 +123,9 @@ internal class GenericTypeReader(
 internal fun readGenericType(signature: String, genericDeclaration: GenericDeclaration): GenericType {
   var genericType: GenericType? = null
   SignatureReader(signature).acceptType(
-      GenericTypeReader(genericDeclaration) {
-        genericType = it
-      }
+    GenericTypeReader(genericDeclaration) {
+      genericType = it
+    }
   )
   return genericType!!
 }

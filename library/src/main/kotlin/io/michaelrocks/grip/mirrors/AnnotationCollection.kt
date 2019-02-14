@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Michael Rozumyanskiy
+ * Copyright 2019 Michael Rozumyanskiy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ interface AnnotationCollection : Collection<AnnotationMirror> {
 
 internal class ImmutableAnnotationCollection(collection: Collection<AnnotationMirror>) : AnnotationCollection {
   private val annotationsByType: Map<Type.Object, AnnotationMirror> =
-      if (collection.isEmpty()) emptyMap()
-      else collection.associateBy { it.type }
+    if (collection.isEmpty()) emptyMap()
+    else collection.associateBy { it.type }
 
   override val size: Int
     get() = annotationsByType.size
@@ -32,20 +32,20 @@ internal class ImmutableAnnotationCollection(collection: Collection<AnnotationMi
   constructor(annotation: AnnotationMirror) : this(listOf(annotation))
 
   override fun contains(element: AnnotationMirror): Boolean =
-      annotationsByType.containsValue(element)
+    annotationsByType.containsValue(element)
 
   override fun containsAll(elements: Collection<AnnotationMirror>): Boolean =
-      annotationsByType.values.containsAll(elements)
+    annotationsByType.values.containsAll(elements)
 
   override fun isEmpty(): Boolean =
-      annotationsByType.isEmpty()
+    annotationsByType.isEmpty()
 
   override fun iterator(): Iterator<AnnotationMirror> =
-      annotationsByType.values.iterator()
+    annotationsByType.values.iterator()
 
   override fun contains(type: Type.Object): Boolean =
-      annotationsByType.containsKey(type)
+    annotationsByType.containsKey(type)
 
   override fun get(type: Type.Object): AnnotationMirror? =
-      annotationsByType[type]
+    annotationsByType[type]
 }
