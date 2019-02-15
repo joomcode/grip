@@ -108,7 +108,7 @@ internal fun readMethodSignature(signature: String, genericDeclaration: GenericD
   }
 
 internal fun MethodSignatureMirror.asGenericDeclaration(): GenericDeclaration {
-  return GenericDeclaration(typeVariables)
+  return GenericDeclaration.create(typeVariables)
 }
 
 internal fun MethodSignatureMirror.asLazyGenericDeclaration(): GenericDeclaration {

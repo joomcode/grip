@@ -98,7 +98,7 @@ internal fun readClassSignature(
   }
 
 internal fun ClassSignatureMirror.asGenericDeclaration(): GenericDeclaration {
-  return GenericDeclaration(typeVariables)
+  return GenericDeclaration.create(typeVariables)
 }
 
 internal fun ClassSignatureMirror.asLazyGenericDeclaration(): GenericDeclaration {
