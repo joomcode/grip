@@ -16,7 +16,9 @@
 
 package io.michaelrocks.grip
 
-import io.michaelrocks.grip.io.IoFactory
+import io.michaelrocks.grip.io.DefaultFileFormatDetector
+import io.michaelrocks.grip.io.DefaultFileSourceFactory
+import io.michaelrocks.grip.io.FileSource
 import io.michaelrocks.grip.mirrors.ReflectorImpl
 import java.io.File
 import java.util.ArrayList
@@ -29,8 +31,11 @@ object GripFactory {
     return create(allFiles)
   }
 
-  fun create(files: Iterable<File>): Grip {
-    val fileRegistry = FileRegistryImpl(files, IoFactory)
+  fun create(
+    classpath: Iterable<File>,
+    fileSourceFactory: FileSource.Factory = DefaultFileSourceFactory(DefaultFileFormatDetector())
+  ): Grip {
+    val fileRegistry = FileRegistryImpl(classpath, fileSourceFactory)
     val reflector = ReflectorImpl()
     val classRegistry = ClassRegistryImpl(fileRegistry, reflector)
     return GripImpl(fileRegistry, classRegistry, fileRegistry)
