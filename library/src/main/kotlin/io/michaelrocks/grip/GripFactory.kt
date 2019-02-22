@@ -38,6 +38,6 @@ object GripFactory {
     val fileRegistry = FileRegistryImpl(classpath, fileSourceFactory)
     val reflector = ReflectorImpl()
     val classRegistry = ClassRegistryImpl(fileRegistry, reflector)
-    return GripImpl(fileRegistry, classRegistry, fileRegistry)
+    return GripImpl(fileRegistry, classRegistry)
   }
 }
