@@ -21,7 +21,7 @@ import io.michaelrocks.grip.classes.Annotation2
 import io.michaelrocks.grip.classes.Class1
 import io.michaelrocks.grip.classes.Class2
 import io.michaelrocks.grip.classes.Enum1
-import io.michaelrocks.grip.mirrors.ReflectorImpl
+import io.michaelrocks.grip.mirrors.DefaultReflector
 import io.michaelrocks.grip.mirrors.getObjectType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -42,9 +42,9 @@ class GripTest {
       Annotation2::class,
       Enum1::class
     )
-    val reflector = ReflectorImpl()
-    val classRegistry = ClassRegistryImpl(fileRegistry, reflector)
-    grip = GripImpl(fileRegistry, classRegistry)
+    val reflector = DefaultReflector()
+    val classRegistry = DefaultClassRegistry(fileRegistry, reflector)
+    grip = DefaultGrip(fileRegistry, classRegistry)
   }
 
   @Test

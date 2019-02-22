@@ -37,7 +37,7 @@ internal interface Reflector {
   fun reflect(data: ByteArray, classRegistry: ClassRegistry, forAnnotation: Boolean): ClassMirror
 }
 
-internal class ReflectorImpl : Reflector {
+internal class DefaultReflector : Reflector {
   override fun reflect(data: ByteArray, classRegistry: ClassRegistry, forAnnotation: Boolean): ClassMirror {
     val reader = ClassReader(data)
     return if (forAnnotation) {
