@@ -17,27 +17,40 @@
 package io.michaelrocks.grip
 
 import io.michaelrocks.grip.io.DefaultFileFormatDetector
+import io.michaelrocks.grip.io.DefaultFileSinkFactory
 import io.michaelrocks.grip.io.DefaultFileSourceFactory
+import io.michaelrocks.grip.io.FileFormatDetector
+import io.michaelrocks.grip.io.FileSink
 import io.michaelrocks.grip.io.FileSource
 import io.michaelrocks.grip.mirrors.DefaultReflector
 import java.io.File
 import java.util.ArrayList
 
 object GripFactory {
-  fun create(file: File, vararg files: File): Grip {
+  @JvmOverloads
+  fun create(file: File, vararg files: File, outputDirectory: File? = null): Grip {
     val allFiles = ArrayList<File>(files.size + 1)
     allFiles.add(file)
     allFiles.addAll(files)
-    return create(allFiles)
+    return create(allFiles, outputDirectory = outputDirectory)
   }
 
+  @JvmOverloads
   fun create(
     classpath: Iterable<File>,
-    fileSourceFactory: FileSource.Factory = DefaultFileSourceFactory(DefaultFileFormatDetector())
+    fileFormatDetector: FileFormatDetector = DefaultFileFormatDetector(),
+    fileSourceFactory: FileSource.Factory = DefaultFileSourceFactory(fileFormatDetector),
+    fileSinkFactory: FileSink.Factory = DefaultFileSinkFactory(),
+    outputDirectory: File? = null
   ): Grip {
     val fileRegistry = DefaultFileRegistry(classpath, fileSourceFactory)
     val reflector = DefaultReflector()
     val classRegistry = DefaultClassRegistry(fileRegistry, reflector)
-    return DefaultGrip(fileRegistry, classRegistry)
+    val classProducer = if (outputDirectory != null) {
+      DefaultClassProducer(fileRegistry, fileSinkFactory, fileFormatDetector, outputDirectory)
+    } else {
+      UnsupportedClassProducer("Cannot produce a class because output directory isn't set")
+    }
+    return DefaultGrip(fileRegistry, classRegistry, classProducer)
   }
 }
