@@ -27,7 +27,8 @@ import io.michaelrocks.mockito.notNull
 import io.michaelrocks.mockito.times
 import io.michaelrocks.mockito.verify
 import io.michaelrocks.mockito.verifyNoMoreInteractions
-import junit.framework.Assert.fail
+import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.objectweb.asm.ClassWriter
@@ -136,7 +137,8 @@ class DefaultClassProducerTest {
   }
 
   private fun produceClass(internalName: String, overwrite: Boolean) {
-    classProducer.produceClass(createClassByteArray(internalName), overwrite)
+    val type = classProducer.produceClass(createClassByteArray(internalName), overwrite)
+    assertEquals(internalName, type.internalName)
   }
 
   private fun createClassByteArray(internalName: String): ByteArray {
