@@ -38,10 +38,10 @@ object GripFactory {
   @JvmOverloads
   fun create(
     classpath: Iterable<File>,
+    outputDirectory: File? = null,
     fileFormatDetector: FileFormatDetector = DefaultFileFormatDetector(),
     fileSourceFactory: FileSource.Factory = DefaultFileSourceFactory(fileFormatDetector),
-    fileSinkFactory: FileSink.Factory = DefaultFileSinkFactory(),
-    outputDirectory: File? = null
+    fileSinkFactory: FileSink.Factory = DefaultFileSinkFactory()
   ): Grip {
     val fileRegistry = DefaultFileRegistry(classpath, fileSourceFactory)
     val reflector = DefaultReflector()
