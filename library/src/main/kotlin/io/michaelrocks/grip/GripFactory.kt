@@ -27,23 +27,18 @@ import io.michaelrocks.grip.io.FileSource
 import io.michaelrocks.grip.mirrors.DefaultReflector
 import io.michaelrocks.grip.mirrors.Type
 import java.io.File
-import java.util.ArrayList
 
-object GripFactory {
-  @JvmOverloads
-  fun create(file: File, vararg files: File, outputDirectory: File? = null): Grip {
-    val allFiles = ArrayList<File>(files.size + 1)
-    allFiles.add(file)
-    allFiles.addAll(files)
-    return createInternal(allFiles, outputDirectory = outputDirectory)
-  }
+interface GripFactory {
+  fun create(classpath: Iterable<File>, outputDirectory: File? = null): Grip
+  fun createMutable(classpath: Iterable<File>, outputDirectory: File? = null): MutableGrip
+}
 
-  @JvmOverloads
-  fun create(classpath: Iterable<File>, outputDirectory: File? = null): Grip {
+object DefaultGripFactory : GripFactory {
+  override fun create(classpath: Iterable<File>, outputDirectory: File?): Grip {
     return createInternal(classpath, outputDirectory)
   }
 
-  fun createMutable(classpath: Iterable<File>, outputDirectory: File? = null): MutableGrip {
+  override fun createMutable(classpath: Iterable<File>, outputDirectory: File?): MutableGrip {
     return createInternal(classpath, outputDirectory)
   }
 
@@ -68,6 +63,7 @@ object GripFactory {
         return type
       }
     }
+
     return DefaultMutableGrip(fileRegistry, classRegistry, wrappedClassProducer)
   }
 
