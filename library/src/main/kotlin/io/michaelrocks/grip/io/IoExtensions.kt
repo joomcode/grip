@@ -25,7 +25,7 @@ import kotlin.io.readBytes as readBytesKotlin
 // In this case we don't want to crash and try to workaround ABI incompatibility with these hacks.
 
 @Suppress("deprecation")
-fun File.readBytes(): ByteArray {
+internal fun File.readBytes(): ByteArray {
   return if (KotlinVersion.CURRENT.isAtLeast(1, 3, 0)) {
     readBytesKotlin()
   } else {
@@ -34,7 +34,7 @@ fun File.readBytes(): ByteArray {
 }
 
 @Suppress("deprecation")
-fun InputStream.readBytes(): ByteArray {
+internal fun InputStream.readBytes(): ByteArray {
   return if (KotlinVersion.CURRENT.isAtLeast(1, 3, 0)) {
     readBytesKotlin()
   } else {

@@ -35,36 +35,24 @@ object GripFactory {
     val allFiles = ArrayList<File>(files.size + 1)
     allFiles.add(file)
     allFiles.addAll(files)
-    return create(allFiles, outputDirectory = outputDirectory)
+    return createInternal(allFiles, outputDirectory = outputDirectory)
   }
 
   @JvmOverloads
-  fun create(
+  fun create(classpath: Iterable<File>, outputDirectory: File? = null): Grip {
+    return createInternal(classpath, outputDirectory)
+  }
+
+  fun createMutable(classpath: Iterable<File>, outputDirectory: File? = null): MutableGrip {
+    return createInternal(classpath, outputDirectory)
+  }
+
+  internal fun createInternal(
     classpath: Iterable<File>,
     outputDirectory: File? = null,
     fileFormatDetector: FileFormatDetector = DefaultFileFormatDetector(),
     fileSourceFactory: FileSource.Factory = DefaultFileSourceFactory(fileFormatDetector),
     fileSinkFactory: FileSink.Factory = DefaultFileSinkFactory()
-  ): Grip {
-    return createInternal(classpath, outputDirectory, fileFormatDetector, fileSourceFactory, fileSinkFactory)
-  }
-
-  fun createMutable(
-    classpath: Iterable<File>,
-    outputDirectory: File? = null,
-    fileFormatDetector: FileFormatDetector = DefaultFileFormatDetector(),
-    fileSourceFactory: FileSource.Factory = DefaultFileSourceFactory(fileFormatDetector),
-    fileSinkFactory: FileSink.Factory = DefaultFileSinkFactory()
-  ): MutableGrip {
-    return createInternal(classpath, outputDirectory, fileFormatDetector, fileSourceFactory, fileSinkFactory)
-  }
-
-  private fun createInternal(
-    classpath: Iterable<File>,
-    outputDirectory: File? = null,
-    fileFormatDetector: FileFormatDetector,
-    fileSourceFactory: FileSource.Factory,
-    fileSinkFactory: FileSink.Factory
   ): MutableGrip {
     val fileRegistry = DefaultFileRegistry(classpath, fileSourceFactory)
     val reflector = DefaultReflector()
