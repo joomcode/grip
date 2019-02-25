@@ -5,6 +5,13 @@ allprojects {
   ext.kotlinVersion = '1.3.21'
   ext.asmVersion = '7.0'
   ext.pabloVersion = '1.0.3'
+  ext.logbackVersion = '1.2.3'
+
+  ext.androidCompileSdkVersion = 28
+  ext.androidTargetSdkVersion = 28
+  ext.androidMinSdkVersion = 16
+  ext.androidBuildToolsVersion = '28.0.3'
+  ext.androidToolsVersion = '3.3.1'
 
   ext.junitVersion = '4.12'
   ext.mockitoVersion = '2.24.0'
@@ -12,6 +19,7 @@ allprojects {
   buildscript {
     repositories {
       mavenLocal()
+      google()
       jcenter()
     }
 
@@ -23,6 +31,7 @@ allprojects {
 
   repositories {
     mavenLocal()
+    google()
     jcenter()
   }
 }
