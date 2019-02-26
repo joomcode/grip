@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip
+package io.michaelrocks.grip.impl.io
 
-import java.io.File
+object EmptyFileSource : FileSource {
+  override fun listFiles(callback: (String, FileSource.EntryType) -> Unit) {
+  }
 
-interface GripFactory {
-  fun create(classpath: Iterable<File>, outputDirectory: File? = null): Grip
-  fun createMutable(classpath: Iterable<File>, outputDirectory: File? = null): MutableGrip
+  override fun readFile(path: String): ByteArray {
+    throw UnsupportedOperationException()
+  }
+
+  override fun close() {
+  }
+
+  override fun toString(): String {
+    return "EmptyFileSource"
+  }
 }

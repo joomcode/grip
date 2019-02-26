@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip
+package io.michaelrocks.grip.impl.io
 
-import java.io.File
-
-interface GripFactory {
-  fun create(classpath: Iterable<File>, outputDirectory: File? = null): Grip
-  fun createMutable(classpath: Iterable<File>, outputDirectory: File? = null): MutableGrip
+enum class FileFormat {
+  DIRECTORY,
+  JAR
 }

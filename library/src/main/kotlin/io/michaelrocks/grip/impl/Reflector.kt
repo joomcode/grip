@@ -14,21 +14,11 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl
 
-import java.io.File
+import io.michaelrocks.grip.ClassRegistry
+import io.michaelrocks.grip.mirrors.ClassMirror
 
-internal interface FileSource : AutoCloseable {
-  fun listFiles(callback: (name: String, type: EntryType) -> Unit)
-  fun readFile(path: String): ByteArray
-
-  enum class EntryType {
-    CLASS,
-    FILE,
-    DIRECTORY
-  }
-
-  interface Factory {
-    fun createFileSource(inputFile: File, fileFormat: FileFormat? = null): FileSource
-  }
+interface Reflector {
+  fun reflect(data: ByteArray, classRegistry: ClassRegistry, forAnnotation: Boolean): ClassMirror
 }

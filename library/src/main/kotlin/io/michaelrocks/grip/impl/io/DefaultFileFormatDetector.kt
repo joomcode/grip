@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl.io
 
 import java.io.File
 
-internal interface FileFormatDetector {
-  fun detectFileFormat(file: File): FileFormat
+class DefaultFileFormatDetector : FileFormatDetector {
+  override fun detectFileFormat(file: File): FileFormat {
+    return when {
+      !file.exists() || file.isDirectory -> FileFormat.DIRECTORY
+      else -> FileFormat.JAR
+    }
+  }
 }

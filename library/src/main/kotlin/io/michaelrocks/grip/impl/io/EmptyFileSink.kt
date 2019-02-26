@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip
+package io.michaelrocks.grip.impl.io
 
-import java.io.File
+object EmptyFileSink : FileSink {
+  override fun createFile(path: String, data: ByteArray) {
+    throw UnsupportedOperationException()
+  }
 
-interface GripFactory {
-  fun create(classpath: Iterable<File>, outputDirectory: File? = null): Grip
-  fun createMutable(classpath: Iterable<File>, outputDirectory: File? = null): MutableGrip
+  override fun createDirectory(path: String) {
+    throw UnsupportedOperationException()
+  }
+
+  override fun flush() {
+  }
+
+  override fun close() {
+  }
+
+  override fun toString(): String {
+    return "EmptyFileSink"
+  }
 }

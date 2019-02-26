@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl.io
 
-internal object EmptyFileSink : FileSink {
-  override fun createFile(path: String, data: ByteArray) {
-    throw UnsupportedOperationException()
-  }
+import java.io.File
 
-  override fun createDirectory(path: String) {
-    throw UnsupportedOperationException()
-  }
-
-  override fun flush() {
-  }
-
-  override fun close() {
-  }
-
-  override fun toString(): String {
-    return "EmptyFileSink"
+class DefaultFileSourceFactory(
+  private val fileFormatDetector: FileFormatDetector
+) : FileSource.Factory {
+  override fun createFileSource(inputFile: File, fileFormat: FileFormat?): FileSource {
+    return when (fileFormat) {
+      null -> createFileSource(inputFile, fileFormatDetector.detectFileFormat(inputFile))
+      FileFormat.DIRECTORY -> DirectoryFileSource(inputFile)
+      FileFormat.JAR -> JarFileSource(inputFile)
+    }
   }
 }

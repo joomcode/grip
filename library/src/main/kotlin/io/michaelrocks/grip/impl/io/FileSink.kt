@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl.io
 
 import java.io.File
 
-internal class DefaultFileFormatDetector : FileFormatDetector {
-  override fun detectFileFormat(file: File): FileFormat {
-    return when {
-      !file.exists() || file.isDirectory -> FileFormat.DIRECTORY
-      else -> FileFormat.JAR
-    }
+interface FileSink : AutoCloseable {
+  fun createFile(path: String, data: ByteArray)
+  fun createDirectory(path: String)
+  fun flush()
+
+  interface Factory {
+    fun createFileSink(outputFile: File, fileFormat: FileFormat): FileSink
   }
 }

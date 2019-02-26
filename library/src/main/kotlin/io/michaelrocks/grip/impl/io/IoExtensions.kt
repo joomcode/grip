@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl.io
 
 import java.io.File
 import java.io.InputStream

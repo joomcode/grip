@@ -14,18 +14,28 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl.io
 
 import java.io.File
 
-internal class DefaultFileSourceFactory(
-  private val fileFormatDetector: FileFormatDetector
-) : FileSource.Factory {
-  override fun createFileSource(inputFile: File, fileFormat: FileFormat?): FileSource {
-    return when (fileFormat) {
-      null -> createFileSource(inputFile, fileFormatDetector.detectFileFormat(inputFile))
-      FileFormat.DIRECTORY -> DirectoryFileSource(inputFile)
-      FileFormat.JAR -> JarFileSource(inputFile)
-    }
+class DirectoryFileSink(private val directory: File) : FileSink {
+  override fun createFile(path: String, data: ByteArray) {
+    val file = File(directory, path)
+    file.parentFile?.mkdirs()
+    file.writeBytes(data)
+  }
+
+  override fun createDirectory(path: String) {
+    File(directory, path).mkdirs()
+  }
+
+  override fun flush() {
+  }
+
+  override fun close() {
+  }
+
+  override fun toString(): String {
+    return "DirectoryFileSink($directory)"
   }
 }

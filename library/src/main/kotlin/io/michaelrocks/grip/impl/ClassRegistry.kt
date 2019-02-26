@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl
 
-internal enum class FileFormat {
-  DIRECTORY,
-  JAR
-}
+import io.michaelrocks.grip.ClassRegistry
+import io.michaelrocks.grip.MutableClassRegistry
+
+interface CloseableClassRegistry : ClassRegistry, AutoCloseable
+interface CloseableMutableClassRegistry : CloseableClassRegistry, MutableClassRegistry

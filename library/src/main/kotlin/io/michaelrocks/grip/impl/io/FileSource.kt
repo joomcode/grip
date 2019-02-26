@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl.io
 
 import java.io.File
 
-internal interface FileSink : AutoCloseable {
-  fun createFile(path: String, data: ByteArray)
-  fun createDirectory(path: String)
-  fun flush()
+interface FileSource : AutoCloseable {
+  fun listFiles(callback: (name: String, type: EntryType) -> Unit)
+  fun readFile(path: String): ByteArray
+
+  enum class EntryType {
+    CLASS,
+    FILE,
+    DIRECTORY
+  }
 
   interface Factory {
-    fun createFileSink(outputFile: File, fileFormat: FileFormat): FileSink
+    fun createFileSource(inputFile: File, fileFormat: FileFormat? = null): FileSource
   }
 }

@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.io
+package io.michaelrocks.grip.impl
 
-import java.io.File
+import io.michaelrocks.grip.FileRegistry
+import io.michaelrocks.grip.MutableFileRegistry
 
-internal class DefaultFileSinkFactory : FileSink.Factory {
-  override fun createFileSink(outputFile: File, fileFormat: FileFormat): FileSink {
-    return when (fileFormat) {
-      FileFormat.DIRECTORY -> DirectoryFileSink(outputFile)
-      FileFormat.JAR -> JarFileSink(outputFile)
-    }
-  }
-}
+interface CloseableFileRegistry : FileRegistry, AutoCloseable
+interface CloseableMutableFileRegistry : CloseableFileRegistry, MutableFileRegistry

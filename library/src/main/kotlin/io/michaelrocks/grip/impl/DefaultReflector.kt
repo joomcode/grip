@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.grip.mirrors
+package io.michaelrocks.grip.impl
 
 import io.michaelrocks.grip.ClassRegistry
 import io.michaelrocks.grip.commons.given
+import io.michaelrocks.grip.mirrors.ClassMirror
+import io.michaelrocks.grip.mirrors.Enclosure
+import io.michaelrocks.grip.mirrors.FieldMirror
+import io.michaelrocks.grip.mirrors.InnerClass
+import io.michaelrocks.grip.mirrors.LazyClassMirror
+import io.michaelrocks.grip.mirrors.MethodMirror
 import io.michaelrocks.grip.mirrors.annotation.AnnotationInstanceReader
 import io.michaelrocks.grip.mirrors.annotation.AnnotationValueReader
+import io.michaelrocks.grip.mirrors.getMethodType
+import io.michaelrocks.grip.mirrors.getObjectType
+import io.michaelrocks.grip.mirrors.getObjectTypeByInternalName
+import io.michaelrocks.grip.mirrors.getType
+import io.michaelrocks.grip.mirrors.isConstructor
 import io.michaelrocks.grip.mirrors.signature.GenericDeclaration
 import io.michaelrocks.grip.mirrors.signature.LazyClassSignatureMirror
 import io.michaelrocks.grip.mirrors.signature.LazyMethodSignatureMirror
@@ -33,11 +44,7 @@ import org.objectweb.asm.FieldVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
-internal interface Reflector {
-  fun reflect(data: ByteArray, classRegistry: ClassRegistry, forAnnotation: Boolean): ClassMirror
-}
-
-internal class DefaultReflector : Reflector {
+class DefaultReflector : Reflector {
   override fun reflect(data: ByteArray, classRegistry: ClassRegistry, forAnnotation: Boolean): ClassMirror {
     val reader = ClassReader(data)
     return if (forAnnotation) {
