@@ -21,4 +21,8 @@ import java.io.File
 interface GripFactory {
   fun create(classpath: Iterable<File>, outputDirectory: File? = null): Grip
   fun createMutable(classpath: Iterable<File>, outputDirectory: File? = null): MutableGrip
+
+  companion object {
+    val instance: GripFactory get() = DefaultGripFactory
+  }
 }

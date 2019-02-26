@@ -17,7 +17,6 @@
 package io.michaelrocks.grip.plugin.transform
 
 import io.michaelrocks.grip.ClassMirrorSource
-import io.michaelrocks.grip.DefaultGripFactory
 import io.michaelrocks.grip.Grip
 import io.michaelrocks.grip.GripFactory
 import io.michaelrocks.grip.mirrors.ClassMirror
@@ -34,7 +33,7 @@ internal interface TransformRunner {
 internal class DefaultTransformRunner(
   private val transforms: List<Transform>,
   private val outputProvider: OutputProvider,
-  private val gripFactory: GripFactory = DefaultGripFactory
+  private val gripFactory: GripFactory = GripFactory.instance
 ) : TransformRunner {
   private val logger = getLogger()
 
