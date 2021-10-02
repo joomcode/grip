@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.joom.grip:grip:0.8.0-beta'
+  compile 'com.joom.grip:grip:0.8.0'
 }
 ```
 
