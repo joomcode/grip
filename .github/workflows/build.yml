@@ -30,7 +30,7 @@ jobs:
           java-version: 8
 
       - name: Publish bootstrap artifacts
-        run: ./gradlew publishToMavenLocal -Pbootstrap=true -Ppablo.signing.enabled=false ${{ env.PABLO_OPTS }}
+        run: ./gradlew publishToMavenLocal -Pbootstrap=true ${{ env.PABLO_OPTS }}
 
       - name: Run unit tests
         run: ./gradlew check
