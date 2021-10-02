@@ -1,4 +1,4 @@
-[![Build](https://github.com/MichaelRocks/grip/actions/workflows/build.yml/badge.svg)](https://github.com/MichaelRocks/grip/actions/workflows/build.yml)
+[![Build](https://github.com/joomcode/grip/actions/workflows/build.yml/badge.svg)](https://github.com/joomcode/grip/actions/workflows/build.yml)
 
 Grip
 ====
@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-  compile 'io.michaelrocks:grip:0.8.0-beta'
+  compile 'com.joom.grip:grip:0.8.0-beta'
 }
 ```
 
@@ -72,7 +72,7 @@ it in queries.
 
 License
 =======
-    Copyright 2021 Michael Rozumyanskiy
+    Copyright 2021 SIA Joom
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -86,4 +86,4 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
- [1]: https://github.com/MichaelRocks/grip/blob/master/library/src/main/kotlin/io/michaelrocks/grip/Matchers.kt
+ [1]: https://github.com/joomcode/grip/blob/master/library/src/main/kotlin/io/joomcode/grip/Matchers.kt

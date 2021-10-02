@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Michael Rozumyanskiy
+ * Copyright 2019 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ pablo {
     name = 'Grip'
     description = 'SQL-like queries on JVM classes metadata using Kotlin DSL.'
     inceptionYear = '2016'
-    url = 'https://github.com/michaelrocks/grip'
+    url = 'https://github.com/joomcode/grip'
 
     licenses {
       license {
@@ -56,9 +56,9 @@ pablo {
       }
     }
     scm {
-      connection = 'scm:git:git://github.com/michaelrocks/grip.git'
-      developerConnection = 'scm:git:ssh://git@github.com/michaelrocks/grip.git'
-      url = 'https://github.com/michaelrocks/grip'
+      connection = 'scm:git:git://github.com/joomcode/grip.git'
+      developerConnection = 'scm:git:ssh://git@github.com/joomcode/grip.git'
+      url = 'https://github.com/joomcode/grip'
     }
   }
 }
