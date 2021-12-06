@@ -23,7 +23,9 @@ import com.joom.grip.mirrors.Type
 import com.joom.grip.mirrors.getObjectTypeByInternalName
 import java.io.Closeable
 import java.io.File
+import javax.annotation.concurrent.ThreadSafe
 
+@ThreadSafe
 interface FileRegistry {
   operator fun contains(file: File): Boolean
   operator fun contains(type: Type.Object): Boolean

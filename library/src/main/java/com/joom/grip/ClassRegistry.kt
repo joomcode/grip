@@ -28,7 +28,9 @@ import org.objectweb.asm.Opcodes
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import java.util.concurrent.ConcurrentHashMap
+import javax.annotation.concurrent.ThreadSafe
 
+@ThreadSafe
 interface ClassRegistry {
   fun getClassMirror(type: Type.Object): ClassMirror
   fun getAnnotationMirror(type: Type.Object): AnnotationMirror
