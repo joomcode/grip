@@ -17,7 +17,9 @@
 package com.joom.grip
 
 import java.io.Closeable
+import javax.annotation.concurrent.ThreadSafe
 
+@ThreadSafe
 interface Grip : Closeable {
   val fileRegistry: FileRegistry
   val classRegistry: ClassRegistry

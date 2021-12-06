@@ -24,6 +24,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
   implementation "org.ow2.asm:asm:$asmVersion"
+  implementation "com.google.code.findbugs:jsr305:$jsr305"
 
   testImplementation "junit:junit:$junitVersion"
   testImplementation "org.mockito:mockito-core:$mockitoVersion"

@@ -20,7 +20,9 @@ import com.joom.grip.io.IoFactory
 import com.joom.grip.mirrors.ReflectorImpl
 import org.objectweb.asm.Opcodes
 import java.io.File
+import javax.annotation.concurrent.ThreadSafe
 
+@ThreadSafe
 interface GripFactory {
   fun create(file: File, vararg files: File): Grip
   fun create(files: Iterable<File>): Grip
