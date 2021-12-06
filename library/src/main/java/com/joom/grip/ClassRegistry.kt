@@ -27,6 +27,7 @@ import com.joom.grip.mirrors.getObjectType
 import org.objectweb.asm.Opcodes
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
+import java.util.concurrent.ConcurrentHashMap
 
 interface ClassRegistry {
   fun getClassMirror(type: Type.Object): ClassMirror
@@ -37,16 +38,16 @@ internal class ClassRegistryImpl(
   private val fileRegistry: FileRegistry,
   private val reflector: Reflector
 ) : ClassRegistry {
-  private val classesByType = HashMap<Type, ClassMirror>()
-  private val annotationsByType = HashMap<Type, AnnotationMirror>()
+  private val classesByType = ConcurrentHashMap<Type, ClassMirror>()
+  private val annotationsByType = ConcurrentHashMap<Type, AnnotationMirror>()
 
   override fun getClassMirror(type: Type.Object): ClassMirror =
-    classesByType.getOrPut(type) { readClassMirror(type, false) }
+    classesByType.computeIfAbsent(type) { readClassMirror(type, false) }
 
   override fun getAnnotationMirror(type: Type.Object): AnnotationMirror =
-    annotationsByType.getOrPut(type) {
+    annotationsByType.computeIfAbsent(type) {
       if (type !in fileRegistry) {
-        return UnresolvedAnnotationMirror(type)
+        UnresolvedAnnotationMirror(type)
       } else {
         val classMirror = readClassMirror(type, true)
         val visible = isAnnotationVisible(classMirror)
