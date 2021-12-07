@@ -44,10 +44,10 @@ internal class ClassRegistryImpl(
   private val annotationsByType = ConcurrentHashMap<Type, AnnotationMirror>()
 
   override fun getClassMirror(type: Type.Object): ClassMirror =
-    classesByType.computeIfAbsent(type) { readClassMirror(type, false) }
+    classesByType.getOrPut(type) { readClassMirror(type, false) }
 
   override fun getAnnotationMirror(type: Type.Object): AnnotationMirror =
-    annotationsByType.computeIfAbsent(type) {
+    annotationsByType.getOrPut(type) {
       if (type !in fileRegistry) {
         UnresolvedAnnotationMirror(type)
       } else {
