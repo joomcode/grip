@@ -16,13 +16,8 @@
 
 package com.joom.grip.commons
 
-import java.io.Closeable
-import java.io.IOException
+import java.nio.file.Path
 
-internal fun Closeable.closeQuietly() {
-  try {
-    close()
-  } catch (exception: IOException) {
-    // Ignore the exception.
-  }
+internal fun Path.toAbsoluteNormalized(): Path {
+  return toAbsolutePath().normalize()
 }

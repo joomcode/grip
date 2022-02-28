@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.joom.grip.io
 
 import java.io.Closeable
-import java.io.File
+import java.nio.file.Path
 
 interface FileSource : Closeable {
   fun listFiles(callback: (name: String, type: EntryType) -> Unit)
@@ -30,6 +30,6 @@ interface FileSource : Closeable {
   }
 
   interface Factory {
-    fun createFileSource(inputFile: File): FileSource
+    fun createFileSource(inputPath: Path): FileSource
   }
 }

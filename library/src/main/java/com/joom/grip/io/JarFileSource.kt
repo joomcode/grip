@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package com.joom.grip.io
 
-import java.io.File
 import java.io.IOException
+import java.nio.file.Path
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 
-class JarFileSource(private val jarFile: File) : FileSource {
-  private val jar = JarFile(jarFile, true)
+class JarFileSource(private val jarPath: Path) : FileSource {
+
+  private val jar = JarFile(jarPath.toFile(), true)
 
   override fun listFiles(callback: (String, FileSource.EntryType) -> Unit) {
     fun JarEntry.toEntryType() = when {
@@ -51,6 +52,6 @@ class JarFileSource(private val jarFile: File) : FileSource {
   }
 
   override fun toString(): String {
-    return "JarFileSource($jarFile)"
+    return "JarFileSource($jarPath)"
   }
 }

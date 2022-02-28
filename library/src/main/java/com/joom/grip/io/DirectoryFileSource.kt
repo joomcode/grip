@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,12 @@
 package com.joom.grip.io
 
 import java.io.File
+import java.nio.file.Path
 
-class DirectoryFileSource(private val directory: File) : FileSource {
+class DirectoryFileSource(directoryPath: Path) : FileSource {
+
+  private val directory = directoryPath.toFile()
+
   override fun listFiles(callback: (String, FileSource.EntryType) -> Unit) {
     fun File.toEntryType() = when {
       isDirectory -> FileSource.EntryType.DIRECTORY

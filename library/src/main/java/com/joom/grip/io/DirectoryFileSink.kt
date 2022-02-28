@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,12 @@
 package com.joom.grip.io
 
 import java.io.File
+import java.nio.file.Path
 
-class DirectoryFileSink(private val directory: File) : FileSink {
+class DirectoryFileSink(directoryPath: Path) : FileSink {
+
+  private val directory: File = directoryPath.toFile()
+
   override fun createFile(path: String, data: ByteArray) {
     val file = File(directory, path)
     file.parentFile?.mkdirs()

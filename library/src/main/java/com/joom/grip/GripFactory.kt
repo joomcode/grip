@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ package com.joom.grip
 
 import com.joom.grip.io.IoFactory
 import com.joom.grip.mirrors.ReflectorImpl
-import org.objectweb.asm.Opcodes
-import java.io.File
+import java.nio.file.Path
 import javax.annotation.concurrent.ThreadSafe
+import org.objectweb.asm.Opcodes
 
 @ThreadSafe
 interface GripFactory {
-  fun create(file: File, vararg files: File): Grip
-  fun create(files: Iterable<File>): Grip
+  fun create(path: Path, vararg paths: Path): Grip
+  fun create(paths: Iterable<Path>): Grip
 
   companion object {
     const val ASM_API_DEFAULT = Opcodes.ASM9
@@ -43,15 +43,16 @@ interface GripFactory {
 internal class GripFactoryImpl(
   private val asmApi: Int,
 ) : GripFactory {
-  override fun create(file: File, vararg files: File): Grip {
-    val allFiles = ArrayList<File>(files.size + 1)
-    allFiles.add(file)
-    allFiles.addAll(files)
-    return create(allFiles)
+
+  override fun create(path: Path, vararg paths: Path): Grip {
+    val allPaths = ArrayList<Path>(paths.size + 1)
+    allPaths.add(path)
+    allPaths.addAll(paths)
+    return create(allPaths)
   }
 
-  override fun create(files: Iterable<File>): Grip {
-    val fileRegistry = FileRegistryImpl(files, IoFactory)
+  override fun create(paths: Iterable<Path>): Grip {
+    val fileRegistry = FileRegistryImpl(paths, IoFactory)
     val reflector = ReflectorImpl(asmApi)
     val classRegistry = ClassRegistryImpl(fileRegistry, reflector)
     return GripImpl(fileRegistry, classRegistry, fileRegistry)

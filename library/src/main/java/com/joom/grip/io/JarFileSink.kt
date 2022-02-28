@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,15 @@ package com.joom.grip.io
 
 import com.joom.grip.commons.closeQuietly
 import java.io.File
+import java.nio.file.Path
 import java.nio.file.attribute.FileTime
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 
-class JarFileSink(private val jarFile: File) : FileSink {
+class JarFileSink(jarPath: Path) : FileSink {
+
+  private val jarFile: File = jarPath.toFile()
+
   private val ZERO_FILE_TIME = FileTime.fromMillis(0L)
   private val stream = createJarOutputStream(jarFile)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.joom.grip.io
 
 import java.io.Closeable
-import java.io.File
+import java.nio.file.Path
 
 interface FileSink : Closeable {
   fun createFile(path: String, data: ByteArray)
@@ -25,6 +25,6 @@ interface FileSink : Closeable {
   fun flush()
 
   interface Factory {
-    fun createFileSink(inputFile: File, outputFile: File): FileSink
+    fun createFileSink(inputPath: Path, outputPath: Path): FileSink
   }
 }
