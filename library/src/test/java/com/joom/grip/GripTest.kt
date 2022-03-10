@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ import com.joom.grip.classes.Class2
 import com.joom.grip.classes.Enum1
 import com.joom.grip.mirrors.ReflectorImpl
 import com.joom.grip.mirrors.getObjectType
+import java.nio.file.Paths
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 class GripTest {
   private lateinit var grip: Grip
@@ -49,28 +49,28 @@ class GripTest {
 
   @Test
   fun testClasses() {
-    val file = File("")
+    val path = Paths.get("")
     assertClassesResultContains<Class1>(
-      grip select classes from file where (name(contains("Class1")) and isPublic())
+      grip select classes from path where (name(contains("Class1")) and isPublic())
     )
     assertClassesResultContains<Class1>(
-      grip select classes from file where (name(endsWith("Class1")) and isPublic())
+      grip select classes from path where (name(endsWith("Class1")) and isPublic())
     )
     assertClassesResultContains<Class2>(
-      grip select classes from file where (not(name(endsWith("Class1") or startsWith("Class1"))) and not(isPackagePrivate()))
+      grip select classes from path where (not(name(endsWith("Class1") or startsWith("Class1"))) and not(isPackagePrivate()))
     )
     assertClassesResultContains<Class1>(
-      grip select classes from file where (annotatedWith(getObjectType<Annotation1>()))
+      grip select classes from path where (annotatedWith(getObjectType<Annotation1>()))
     )
     assertClassesResultNotContains<Class1>(
-      grip select classes from file where (annotatedWith(getObjectType<Retention>()))
+      grip select classes from path where (annotatedWith(getObjectType<Retention>()))
     )
   }
 
   @Test
   fun testMethods() {
-    val file = File("")
-    val classes = grip select classes from file where name(contains("Class"))
+    val path = Paths.get("")
+    val classes = grip select classes from path where name(contains("Class"))
     val methods = grip select methods from classes where (not(isStatic()) and not(isConstructor()))
     assertEquals(1, methods.execute()[getObjectType<Class1>()]!!.size)
     assertEquals(1, methods.execute()[getObjectType<Class2>()]!!.size)

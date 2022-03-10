@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,43 @@
 
 package com.joom.grip.io
 
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.exists
+import kotlin.io.path.extension
+import kotlin.io.path.isDirectory
 
 object IoFactory : FileSource.Factory, FileSink.Factory {
-  override fun createFileSource(inputFile: File): FileSource {
-    return when (inputFile.fileType) {
-      FileType.EMPTY -> EmptyFileSource
-      FileType.DIRECTORY -> DirectoryFileSource(inputFile)
-      FileType.JAR -> JarFileSource(inputFile)
+
+  override fun createFileSource(inputPath: Path): FileSource {
+    return when (inputPath.sourceType) {
+      SourceType.EMPTY -> EmptyFileSource
+      SourceType.DIRECTORY -> DirectoryFileSource(inputPath)
+      SourceType.JAR -> JarFileSource(inputPath)
+      SourceType.JRT -> JrtFileSource(inputPath)
     }
   }
 
-  override fun createFileSink(inputFile: File, outputFile: File): FileSink {
-    return when (inputFile.fileType) {
-      FileType.EMPTY -> EmptyFileSink
-      FileType.DIRECTORY -> DirectoryFileSink(outputFile)
-      FileType.JAR -> JarFileSink(outputFile)
+  override fun createFileSink(inputPath: Path, outputPath: Path): FileSink {
+    return when (inputPath.sourceType) {
+      SourceType.EMPTY -> EmptyFileSink
+      SourceType.DIRECTORY -> DirectoryFileSink(outputPath)
+      SourceType.JAR -> JarFileSink(outputPath)
+      SourceType.JRT -> EmptyFileSink
     }
   }
 
-  private val File.fileType: FileType
+  private val Path.sourceType: SourceType
     get() = when {
-      !exists() || isDirectory -> FileType.DIRECTORY
-      extension.endsWith("jar", ignoreCase = true) -> FileType.JAR
+      fileSystem.toString().startsWith("jrt") -> SourceType.JRT
+      !exists() || isDirectory() -> SourceType.DIRECTORY
+      extension.endsWith("jar", ignoreCase = true) -> SourceType.JAR
       else -> error("Unknown file type for file $this")
     }
 
-  private enum class FileType {
+  private enum class SourceType {
     EMPTY,
     DIRECTORY,
-    JAR
+    JAR,
+    JRT
   }
 }

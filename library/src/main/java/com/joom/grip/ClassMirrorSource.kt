@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.joom.grip
 
 import com.joom.grip.mirrors.ClassMirror
-import java.io.File
+import java.nio.file.Path
 
 interface ClassMirrorSource {
   fun getClassMirrors(): Sequence<ClassMirror>
@@ -33,11 +33,11 @@ class FunctionClassMirrorSource(
 
 internal class FilesClassMirrorSource(
   private val grip: Grip,
-  private val files: Collection<File>
+  private val paths: Collection<Path>
 ) : ClassMirrorSource {
   override fun getClassMirrors(): Sequence<ClassMirror> {
-    return files.asSequence().flatMap { file ->
-      grip.fileRegistry.findTypesForFile(file).asSequence().map { type ->
+    return paths.asSequence().flatMap { path ->
+      grip.fileRegistry.findTypesForPath(path).asSequence().map { type ->
         grip.classRegistry.getClassMirror(type)
       }
     }

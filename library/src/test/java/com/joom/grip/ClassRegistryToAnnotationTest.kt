@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -245,7 +245,7 @@ class ClassRegistryToAnnotationTest {
       given(contains(notNull<Type.Object>())).thenAnswer { invocation ->
         entries.any { it.first == invocation.arguments[0] }
       }
-      given(findTypesForFile(notNull())).thenReturn(entries.map { it.first })
+      given(findTypesForPath(notNull())).thenReturn(entries.map { it.first })
       for ((type, data) in entries) {
         given(readClass(type)).thenReturn(data)
       }

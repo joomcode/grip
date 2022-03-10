@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,72 +18,71 @@ package com.joom.grip
 
 import com.joom.grip.commons.closeQuietly
 import com.joom.grip.commons.immutable
+import com.joom.grip.commons.toAbsoluteNormalized
 import com.joom.grip.io.FileSource
 import com.joom.grip.mirrors.Type
 import com.joom.grip.mirrors.getObjectTypeByInternalName
 import java.io.Closeable
-import java.io.File
+import java.nio.file.Path
 import javax.annotation.concurrent.ThreadSafe
 
 @ThreadSafe
 interface FileRegistry {
-  operator fun contains(file: File): Boolean
+  operator fun contains(path: Path): Boolean
   operator fun contains(type: Type.Object): Boolean
-
-  fun classpath(): Collection<File>
-
   fun readClass(type: Type.Object): ByteArray
-  fun findTypesForFile(file: File): Collection<Type.Object>
-  fun findFileForType(type: Type.Object): File?
+  fun findTypesForPath(path: Path): Collection<Type.Object>
+  fun findPathForType(type: Type.Object): Path?
+  fun classpath(): Collection<Path>
 }
 
 internal class FileRegistryImpl(
-  classpath: Iterable<File>,
+  classpath: Iterable<Path>,
   private val fileSourceFactory: FileSource.Factory
 ) : FileRegistry, Closeable {
-  private val sources = LinkedHashMap<File, FileSource>()
-  private val filesByTypes = HashMap<Type.Object, File>()
-  private val typesByFiles = HashMap<File, MutableCollection<Type.Object>>()
+  private val sources = LinkedHashMap<Path, FileSource>()
+  private val pathsByTypes = HashMap<Type.Object, Path>()
+  private val typesByPaths = HashMap<Path, MutableCollection<Type.Object>>()
 
   init {
     classpath.forEach {
-      it.canonicalFile.let { file ->
-        if (file !in sources) {
-          val fileSource = fileSourceFactory.createFileSource(file)
-          sources.put(file, fileSource)
+      it.toAbsoluteNormalized().let { sourcePath ->
+        if (sourcePath !in sources) {
+          val fileSource = fileSourceFactory.createFileSource(sourcePath)
+          sources[sourcePath] = fileSource
           fileSource.listFiles { path, fileType ->
             if (fileType == FileSource.EntryType.CLASS) {
               val name = path.replace('\\', '/').substringBeforeLast(".class")
               val type = getObjectTypeByInternalName(name)
-              filesByTypes.put(type, file)
-              typesByFiles.getOrPut(file) { ArrayList() } += type
+              pathsByTypes[type] = sourcePath
+              typesByPaths.getOrPut(sourcePath) { ArrayList() } += type
             }
           }
         }
       }
     }
 
-    check(!sources.isEmpty()) { "Classpath is empty" }
+    check(sources.isNotEmpty()) { "Classpath is empty" }
   }
 
-  override fun contains(file: File): Boolean {
+  override fun contains(path: Path): Boolean {
     checkNotClosed()
-    return file.canonicalFile in sources
+    return path.toAbsoluteNormalized() in sources
   }
 
   override fun contains(type: Type.Object): Boolean {
     checkNotClosed()
-    return type in filesByTypes
+    return type in pathsByTypes
   }
 
-  override fun classpath(): Collection<File> {
+  override fun classpath(): Collection<Path> {
     checkNotClosed()
     return sources.keys.immutable()
   }
 
   override fun readClass(type: Type.Object): ByteArray {
     checkNotClosed()
-    val file = filesByTypes.getOrElse(type) {
+    val file = pathsByTypes.getOrElse(type) {
       throw IllegalArgumentException("Unable to find a file for ${type.internalName}")
     }
     val fileSource = sources.getOrElse(file) {
@@ -92,23 +91,23 @@ internal class FileRegistryImpl(
     return fileSource.readFile("${type.internalName}.class")
   }
 
-  override fun findTypesForFile(file: File): Collection<Type.Object> {
-    require(contains(file)) { "File $file is not added to the registry" }
-    return typesByFiles[file.canonicalFile]?.immutable() ?: emptyList()
+  override fun findTypesForPath(path: Path): Collection<Type.Object> {
+    require(contains(path)) { "File $path is not added to the registry" }
+    return typesByPaths[path.toAbsoluteNormalized()]?.immutable() ?: emptyList()
   }
 
-  override fun findFileForType(type: Type.Object): File? {
-    return filesByTypes[type]
+  override fun findPathForType(type: Type.Object): Path? {
+    return pathsByTypes[type]
   }
 
   override fun close() {
     sources.values.forEach { it.closeQuietly() }
     sources.clear()
-    filesByTypes.clear()
-    typesByFiles.clear()
+    pathsByTypes.clear()
+    typesByPaths.clear()
   }
 
   private fun checkNotClosed() {
-    check(!sources.isEmpty()) { "FileRegistry was closed" }
+    check(sources.isNotEmpty()) { "FileRegistry was closed" }
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,17 @@ package com.joom.grip
 
 import com.joom.grip.mirrors.Type
 import com.joom.grip.mirrors.getObjectType
-import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
 import kotlin.reflect.KClass
 
 class TestFileRegistry(vararg classes: KClass<*>) : FileRegistry {
   private val classesByType = classes.associateBy { getObjectType(it) }
 
-  override fun contains(file: File): Boolean = true
+  override fun contains(path: Path): Boolean = true
   override fun contains(type: Type.Object): Boolean = type in classesByType
 
-  override fun classpath(): Collection<File> = listOf(DEFAULT_FILE)
+  override fun classpath(): Collection<Path> = listOf(DEFAULT_PATH)
 
   override fun readClass(type: Type.Object): ByteArray {
     val classLoader = classesByType[type]!!.java.classLoader
@@ -36,10 +37,13 @@ class TestFileRegistry(vararg classes: KClass<*>) : FileRegistry {
     }
   }
 
-  override fun findTypesForFile(file: File): Collection<Type.Object> = classesByType.keys
-  override fun findFileForType(type: Type.Object) = if (contains(type)) DEFAULT_FILE else null
+  override fun findTypesForPath(path: Path): Collection<Type.Object> = classesByType.keys
+
+  override fun findPathForType(type: Type.Object): Path? {
+    return if (contains(type)) DEFAULT_PATH else null
+  }
 
   companion object {
-    private val DEFAULT_FILE = File("/")
+    private val DEFAULT_PATH = Paths.get("/")
   }
 }

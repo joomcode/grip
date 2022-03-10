@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@ package com.joom.grip
 import com.joom.grip.mirrors.ClassMirror
 import com.joom.grip.mirrors.Type
 import java.io.File
+import java.nio.file.Path
 
 interface FromConfigurator<M, R> {
   infix fun from(classMirrorSource: ClassMirrorSource): QueryConfigurator<M, R>
-  infix fun from(files: Iterable<File>): QueryConfigurator<M, R>
+  infix fun from(paths: Iterable<Path>): QueryConfigurator<M, R>
   infix fun from(classpath: Classpath): QueryConfigurator<M, R>
 }
 
-infix fun <M, R> FromConfigurator<M, R>.from(file: File): QueryConfigurator<M, R> {
-  return from(listOf(file))
+infix fun <M, R> FromConfigurator<M, R>.from(path: Path): QueryConfigurator<M, R> {
+  return from(listOf(path))
 }
 
 infix fun <M, R> FromConfigurator<M, R>.from(provider: () -> Sequence<ClassMirror>): QueryConfigurator<M, R> {

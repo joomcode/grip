@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SIA Joom
+ * Copyright 2022 SIA Joom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.joom.grip
 
-import java.io.File
+import java.nio.file.Path
 import kotlin.properties.Delegates
 
 internal abstract class AbstractQueryBuilder<M, R>(
@@ -32,8 +32,8 @@ internal abstract class AbstractQueryBuilder<M, R>(
     this.classMirrorSource = classMirrorSource
   }
 
-  override fun from(files: Iterable<File>): QueryConfigurator<M, R> = apply {
-    classMirrorSource = FilesClassMirrorSource(grip, files.toList())
+  override fun from(paths: Iterable<Path>): QueryConfigurator<M, R> = apply {
+    classMirrorSource = FilesClassMirrorSource(grip, paths.toList())
   }
 
   override fun from(classpath: Classpath): QueryConfigurator<M, R> {
