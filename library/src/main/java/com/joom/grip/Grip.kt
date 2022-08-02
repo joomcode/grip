@@ -30,7 +30,7 @@ interface Grip : Closeable {
 internal class GripImpl(
   override val fileRegistry: FileRegistry,
   override val classRegistry: ClassRegistry,
-  private val closeable: Closeable
+  private vararg val closeables: Closeable
 ) : Grip {
 
   private var closed = false
@@ -42,7 +42,9 @@ internal class GripImpl(
 
   override fun close() {
     try {
-      closeable.close()
+      closeables.forEach {
+        it.close()
+      }
     } finally {
       closed = true
     }

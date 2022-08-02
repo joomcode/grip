@@ -23,12 +23,12 @@ import com.joom.grip.classes.Class2
 import com.joom.grip.classes.Enum1
 import com.joom.grip.mirrors.ReflectorImpl
 import com.joom.grip.mirrors.getObjectType
-import java.nio.file.Paths
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.nio.file.Paths
 
 class GripTest {
   private lateinit var grip: Grip
@@ -44,7 +44,7 @@ class GripTest {
     )
     val reflector = ReflectorImpl(GripFactory.ASM_API_DEFAULT)
     val classRegistry = ClassRegistryImpl(fileRegistry, reflector)
-    grip = GripImpl(fileRegistry, classRegistry) {}
+    grip = GripImpl(fileRegistry, classRegistry)
   }
 
   @Test
@@ -74,6 +74,14 @@ class GripTest {
     val methods = grip select methods from classes where (not(isStatic()) and not(isConstructor()))
     assertEquals(1, methods.execute()[getObjectType<Class1>()]!!.size)
     assertEquals(1, methods.execute()[getObjectType<Class2>()]!!.size)
+  }
+
+  @Test(expected = IllegalStateException::class)
+  fun testClose() {
+    grip.close()
+
+    val path = Paths.get("")
+    (grip select classes from path where name(contains("Class"))).execute()
   }
 
   private inline fun <reified T : Any> assertClassesResultContains(query: Query<ClassesResult>) {

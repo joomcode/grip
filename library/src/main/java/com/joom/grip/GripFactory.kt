@@ -55,6 +55,6 @@ internal class GripFactoryImpl(
     val fileRegistry = FileRegistryImpl(paths, IoFactory)
     val reflector = ReflectorImpl(asmApi)
     val classRegistry = ClassRegistryImpl(fileRegistry, reflector)
-    return GripImpl(fileRegistry, classRegistry, fileRegistry)
+    return GripImpl(fileRegistry, classRegistry, fileRegistry, classRegistry)
   }
 }
