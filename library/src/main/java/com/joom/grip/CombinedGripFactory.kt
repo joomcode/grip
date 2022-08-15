@@ -16,6 +16,7 @@
 
 package com.joom.grip
 
+import com.joom.grip.commons.immutable
 import com.joom.grip.mirrors.AnnotationMirror
 import com.joom.grip.mirrors.ClassMirror
 import com.joom.grip.mirrors.Type
@@ -72,7 +73,7 @@ private class CombinedFileRegistryImpl(private val registries: Iterable<FileRegi
   private val pathToRegistry = ConcurrentHashMap<Path, FileRegistry>()
 
   private val classpath by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-    registries.flatMap { it.classpath() }
+    registries.flatMap { it.classpath() }.immutable()
   }
 
   override fun classpath(): Collection<Path> {
