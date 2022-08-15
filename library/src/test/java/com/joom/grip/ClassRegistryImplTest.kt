@@ -25,6 +25,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.nio.file.Paths
 
 class ClassRegistryImplTest {
   private lateinit var classRegistry: ClassRegistry
@@ -32,6 +33,7 @@ class ClassRegistryImplTest {
   @Before
   fun createClassRegistry() {
     val fileRegistry = TestFileRegistry(
+      Paths.get("/"),
       Annotation1::class,
       Annotation2::class
     )

@@ -29,6 +29,8 @@ import java.lang.annotation.RetentionPolicy
 import java.util.concurrent.ConcurrentHashMap
 import javax.annotation.concurrent.ThreadSafe
 import org.objectweb.asm.Opcodes
+import java.io.Closeable
+import java.util.concurrent.atomic.AtomicBoolean
 
 @ThreadSafe
 interface ClassRegistry {
@@ -39,15 +41,21 @@ interface ClassRegistry {
 internal class ClassRegistryImpl(
   private val fileRegistry: FileRegistry,
   private val reflector: Reflector
-) : ClassRegistry {
+) : ClassRegistry, Closeable {
+  private val closed = AtomicBoolean(false)
   private val classesByType = ConcurrentHashMap<Type, ClassMirror>()
   private val annotationsByType = ConcurrentHashMap<Type, AnnotationMirror>()
 
-  override fun getClassMirror(type: Type.Object): ClassMirror =
-    classesByType.getOrPut(type) { readClassMirror(type, false) }
+  override fun getClassMirror(type: Type.Object): ClassMirror {
+    checkNotClosed()
 
-  override fun getAnnotationMirror(type: Type.Object): AnnotationMirror =
-    annotationsByType.getOrPut(type) {
+    return classesByType.getOrPut(type) { readClassMirror(type, false) }
+  }
+
+  override fun getAnnotationMirror(type: Type.Object): AnnotationMirror {
+    checkNotClosed()
+
+    return annotationsByType.getOrPut(type) {
       if (type !in fileRegistry) {
         UnresolvedAnnotationMirror(type)
       } else {
@@ -61,13 +69,26 @@ internal class ClassRegistryImpl(
         }
       }
     }
+  }
+
+  override fun close() {
+    classesByType.clear()
+    annotationsByType.clear()
+    closed.set(true)
+  }
 
   private fun readClassMirror(type: Type.Object, forAnnotation: Boolean): ClassMirror {
+    checkNotClosed()
+
     return try {
       reflector.reflect(fileRegistry.readClass(type), this, forAnnotation)
     } catch (exception: Exception) {
       throw IllegalArgumentException("Unable to read a ClassMirror for ${type.internalName}", exception)
     }
+  }
+
+  private fun checkNotClosed() {
+    check(!closed.get()) { "ClassRegistry was closed" }
   }
 
   companion object {
