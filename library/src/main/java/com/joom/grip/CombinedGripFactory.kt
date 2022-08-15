@@ -18,6 +18,7 @@ package com.joom.grip
 
 import com.joom.grip.commons.immutable
 import com.joom.grip.commons.singleOrNullIfNotFound
+import com.joom.grip.commons.toAbsoluteNormalized
 import com.joom.grip.mirrors.AnnotationMirror
 import com.joom.grip.mirrors.ClassMirror
 import com.joom.grip.mirrors.Type
@@ -116,12 +117,13 @@ private class CombinedFileRegistryImpl(private val registries: Iterable<FileRegi
   }
 
   private fun registryByPath(path: Path): FileRegistry? {
-    pathToRegistry[path]?.let {
+    val normalizedPath = path.toAbsoluteNormalized()
+    pathToRegistry[normalizedPath]?.let {
       return it
     }
 
-    return registries.singleOrNullIfNotFound({ "Multiple registries contain same path $path" }) {
-      it.contains(path)
+    return registries.singleOrNullIfNotFound({ "Multiple registries contain same path $normalizedPath" }) {
+      it.contains(normalizedPath)
     }
   }
 }
