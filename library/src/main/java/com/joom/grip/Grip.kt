@@ -30,7 +30,7 @@ interface Grip : Closeable {
 internal class GripImpl(
   override val fileRegistry: FileRegistry,
   override val classRegistry: ClassRegistry,
-  private vararg val closeables: Closeable
+  private val closeables: Iterable<Closeable> = emptyList()
 ) : Grip {
 
   private var closed = false
