@@ -21,35 +21,32 @@ import com.joom.grip.classes.Annotation2
 import com.joom.grip.classes.Class1
 import com.joom.grip.classes.Class2
 import com.joom.grip.classes.Enum1
-import com.joom.grip.mirrors.ReflectorImpl
 import com.joom.grip.mirrors.getObjectType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class GripTest {
   private lateinit var grip: Grip
 
   @Before
   fun createGrip() {
-    val fileRegistry = TestFileRegistry(
+    grip = TestGripFactory.create(
+      Path(""),
       Class1::class,
       Class2::class,
       Annotation1::class,
       Annotation2::class,
       Enum1::class
     )
-    val reflector = ReflectorImpl(GripFactory.ASM_API_DEFAULT)
-    val classRegistry = ClassRegistryImpl(fileRegistry, reflector)
-    grip = GripImpl(fileRegistry, classRegistry)
   }
 
   @Test
   fun testClasses() {
-    val path = Paths.get("")
+    val path = Path("")
     assertClassesResultContains<Class1>(
       grip select classes from path where (name(contains("Class1")) and isPublic())
     )
@@ -69,7 +66,7 @@ class GripTest {
 
   @Test
   fun testMethods() {
-    val path = Paths.get("")
+    val path = Path("")
     val classes = grip select classes from path where name(contains("Class"))
     val methods = grip select methods from classes where (not(isStatic()) and not(isConstructor()))
     assertEquals(1, methods.execute()[getObjectType<Class1>()]!!.size)
@@ -80,7 +77,7 @@ class GripTest {
   fun testClose() {
     grip.close()
 
-    val path = Paths.get("")
+    val path = Path("")
     (grip select classes from path where name(contains("Class"))).execute()
   }
 

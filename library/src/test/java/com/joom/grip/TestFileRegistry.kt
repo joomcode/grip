@@ -19,16 +19,15 @@ package com.joom.grip
 import com.joom.grip.mirrors.Type
 import com.joom.grip.mirrors.getObjectType
 import java.nio.file.Path
-import java.nio.file.Paths
 import kotlin.reflect.KClass
 
-class TestFileRegistry(vararg classes: KClass<*>) : FileRegistry {
+class TestFileRegistry(private val path: Path, vararg classes: KClass<*>) : FileRegistry {
   private val classesByType = classes.associateBy { getObjectType(it) }
 
-  override fun contains(path: Path): Boolean = true
+  override fun contains(path: Path): Boolean = this.path == path
   override fun contains(type: Type.Object): Boolean = type in classesByType
 
-  override fun classpath(): Collection<Path> = listOf(DEFAULT_PATH)
+  override fun classpath(): Collection<Path> = listOf(path)
 
   override fun readClass(type: Type.Object): ByteArray {
     val classLoader = classesByType[type]!!.java.classLoader
@@ -37,13 +36,13 @@ class TestFileRegistry(vararg classes: KClass<*>) : FileRegistry {
     }
   }
 
-  override fun findTypesForPath(path: Path): Collection<Type.Object> = classesByType.keys
+  override fun findTypesForPath(path: Path): Collection<Type.Object> {
+    require(contains(path)) { "Not a valid path $path" }
 
-  override fun findPathForType(type: Type.Object): Path? {
-    return if (contains(type)) DEFAULT_PATH else null
+    return classesByType.keys
   }
 
-  companion object {
-    private val DEFAULT_PATH = Paths.get("/")
+  override fun findPathForType(type: Type.Object): Path? {
+    return if (contains(type)) path else null
   }
 }
