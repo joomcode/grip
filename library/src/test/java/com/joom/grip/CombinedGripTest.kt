@@ -62,6 +62,26 @@ class CombinedGripTest {
     (grip select classes from Path("/some-path") where isPublic()).execute()
   }
 
+  @Test(expected = IllegalArgumentException::class)
+  fun throwsMultipleGripInstancesContainSamePath() {
+    val grip = CombinedGripFactory.INSTANCE.create(
+      TestGripFactory.create(FIRST_PATH, Class1::class),
+      TestGripFactory.create(FIRST_PATH, Class1::class),
+    )
+
+    grip.fileRegistry.contains(FIRST_PATH)
+  }
+
+  @Test(expected = IllegalArgumentException::class)
+  fun throwsMultipleGripInstancesContainSameType() {
+    val grip = CombinedGripFactory.INSTANCE.create(
+      TestGripFactory.create(FIRST_PATH, Class1::class),
+      TestGripFactory.create(SECOND_PATH, Class1::class),
+    )
+
+    grip.fileRegistry.contains(getObjectType<Class1>())
+  }
+
   private fun createCombinedGrip(): Grip {
     return CombinedGripFactory.INSTANCE.create(
       TestGripFactory.create(FIRST_PATH, Class1::class, Annotation1::class),

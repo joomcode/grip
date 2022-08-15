@@ -26,3 +26,17 @@ internal fun <K, V> Map<K, V>.immutable(): Map<K, V> = Collections.unmodifiableM
 internal fun <T> Set<T>.immutable(): Set<T> = Collections.unmodifiableSet(this)
 internal fun <K, V> SortedMap<K, V>.immutable(): SortedMap<K, V> = Collections.unmodifiableSortedMap(this)
 internal fun <T> SortedSet<T>.immutable(): SortedSet<T> = Collections.unmodifiableSortedSet(this)
+internal inline fun <T : Any> Iterable<T>.singleOrNullIfNotFound(message: () -> String, predicate: (T) -> Boolean): T? {
+  var found: T? = null
+  forEach {
+    if (predicate(it)) {
+      if (found != null) {
+        throw IllegalArgumentException(message())
+      } else {
+        found = it
+      }
+    }
+  }
+
+  return found
+}

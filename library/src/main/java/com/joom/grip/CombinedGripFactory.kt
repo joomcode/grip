@@ -17,6 +17,7 @@
 package com.joom.grip
 
 import com.joom.grip.commons.immutable
+import com.joom.grip.commons.singleOrNullIfNotFound
 import com.joom.grip.mirrors.AnnotationMirror
 import com.joom.grip.mirrors.ClassMirror
 import com.joom.grip.mirrors.Type
@@ -109,8 +110,8 @@ private class CombinedFileRegistryImpl(private val registries: Iterable<FileRegi
       return it
     }
 
-    return registries.firstOrNull { it.contains(type) }?.also {
-      typeToRegistry[type] = it
+    return registries.singleOrNullIfNotFound({ "Multiple registries contain same type ${type.internalName}" }) {
+      it.contains(type)
     }
   }
 
@@ -119,8 +120,8 @@ private class CombinedFileRegistryImpl(private val registries: Iterable<FileRegi
       return it
     }
 
-    return registries.firstOrNull { it.contains(path) }?.also {
-      pathToRegistry[path] = it
+    return registries.singleOrNullIfNotFound({ "Multiple registries contain same path $path" }) {
+      it.contains(path)
     }
   }
 }
