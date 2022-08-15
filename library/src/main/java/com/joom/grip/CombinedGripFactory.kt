@@ -21,7 +21,9 @@ import com.joom.grip.mirrors.ClassMirror
 import com.joom.grip.mirrors.Type
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
+import javax.annotation.concurrent.ThreadSafe
 
+@ThreadSafe
 interface CombinedGripFactory {
   fun create(grip: Grip, vararg grips: Grip): Grip
   fun create(grips: Iterable<Grip>): Grip
