@@ -3,14 +3,6 @@ on: [ push, pull_request ]
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
-  PABLO_OPTS: |
-    -Ppablo.repository.maven.name=Sonatype \
-    -Ppablo.repository.maven.url=https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/ \
-    -Ppablo.repository.maven.username=${{ secrets.SONATYPE_USERNAME }} \
-    -Ppablo.repository.maven.password=${{ secrets.SONATYPE_PASSWORD }} \
-    -Ppablo.signing.keyId=${{ secrets.SIGNING_KEY_ID }} \
-    -Ppablo.signing.password=${{ secrets.SIGNING_PASSWORD }} \
-    -Ppablo.signing.secretKey='${{ secrets.SIGNING_SECRET_KEY }}'
 
 jobs:
   build:
@@ -29,9 +21,6 @@ jobs:
         with:
           java-version: 8
 
-      - name: Publish bootstrap artifacts
-        run: ./gradlew publishToMavenLocal -Pbootstrap=true ${{ env.PABLO_OPTS }}
-
       - name: Run unit tests
         run: ./gradlew check
 
@@ -41,6 +30,12 @@ jobs:
     if: contains(github.ref, '/tags/v')
     needs:
       - build
+    env:
+      ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
+      ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+      ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRET_KEY }}
 
     steps:
       - name: Checkout
@@ -51,5 +46,5 @@ jobs:
         with:
           java-version: 8
 
-      - name: Upload Artifacts
-        run: ./gradlew publishMavenPublicationToSonatypeRepository -Pbootstrap=true ${{ env.PABLO_OPTS }}
+      - name: Publish to Maven Central
+        run: ./gradlew publishAndReleaseToMavenCentral

@@ -15,7 +15,7 @@
  */
 
 apply plugin: 'org.jetbrains.kotlin.jvm'
-apply plugin: 'io.michaelrocks.pablo'
+apply plugin: 'com.vanniktech.maven.publish'
 
 java {
   sourceCompatibility = JavaVersion.VERSION_1_8
@@ -38,12 +38,13 @@ dependencies {
   testImplementation "org.mockito:mockito-core:$mockitoVersion"
 }
 
-tasks.named('jar', Jar).configure {
-  destinationDirectory.set(layout.buildDirectory.dir('jar'))
-}
+mavenPublishing {
+  publishToMavenCentral(true)
 
-pablo {
-  artifactName = 'grip'
+  signAllPublications()
+
+  coordinates(project.group.toString(), 'grip', project.version.toString())
+
   pom {
     name = 'Grip'
     description = 'SQL-like queries on JVM classes metadata using Kotlin DSL.'
