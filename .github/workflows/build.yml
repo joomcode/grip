@@ -17,9 +17,10 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Configure JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
-          java-version: 8
+          distribution: temurin
+          java-version: 17
 
       - name: Run unit tests
         run: ./gradlew check
@@ -42,9 +43,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Configure JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
-          java-version: 8
+          distribution: temurin
+          java-version: 17
 
       - name: Publish to Maven Central
         run: ./gradlew publishAndReleaseToMavenCentral
